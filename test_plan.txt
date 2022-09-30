@@ -1,1 +1,18 @@
-#placeholder
+Test plan
+
+Run tests in the test suite using devtools::test(), there should a test file for every function in the package. 
+
+For each function the expected input and output looks like so: 
+
+format_data: formats the offer files from the EA EMI website https://www.emi.ea.govt.nz/Wholesale/Datasets/BidsAndOffers/Offers to output a data.frame that can be accepted as input for the other functions in the package. 
+Arguments can take single file name or path to folder of multiple files. The function mergesthe files to make a single data.frame, removes unneeded columns and returns a data.frame.  
+It errors if file contents dont have the right columns or if the path is incorrect. 
+To test check using incorrect file inputs and check if outputs are correct.   
+
+anomaly_detect: based on the anomalize package. Accepts offers data as first argument. 
+Prints charts showing any anomalies in the data and returns list of anomalies.
+To test check using incorrectly formatted data and check if date values are returned. 
+
+report: should print summaries of the other functions in the package so users only need to use this function if they just want to read report.
+In order gives summary statistics, offer plot, anomaly_detect plots and gives summary paragraph on if any changes or anomalies were detected. 
+To test check using incorrectly formatted data and check if correct plots and summaries are being printed. 

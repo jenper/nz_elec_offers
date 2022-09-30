@@ -11,4 +11,3 @@ report <- function(df = offers){
   print(offers::anomaly_detect(df))
 }
 
-report()
