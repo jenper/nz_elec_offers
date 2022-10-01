@@ -1,3 +1,4 @@
+#read.csv('C:/Users/jenly/Downloads/ReconciledInjectionAndOfftake_202111_20220626_123724.csv.gz')
 
 Rcpp::cppFunction('
 std::vector<std::string> rcpp_time(std::vector<double> TP) {
@@ -13,20 +14,23 @@ std::vector<std::string> rcpp_time(std::vector<double> TP) {
 }')
 
 format_data <- function(path){
+  
   #check if folder and merge contents
   tryCatch({
     if (exists('df', where = environment(), inherits=FALSE)){
       remove(df)
     }
     if (file_test("-d", path)){
+      ##convert for loop to c++
       for (file in list.files(path)){
         if (!exists('df', where = environment(), inherits=FALSE)){
-            df = read.csv(paste(path, file, sep='/'))
-         } else {
-            df2 = read.csv(paste(path, file, sep='/'))
-            df = rbind(df, df2)
-         }
+          df = read.csv(paste(path, file, sep='/'))
+        } else {
+          df2 = read.csv(paste(path, file, sep='/'))
+          df = rbind(df, df2)
+        }
       }
+      ##
       if (exists('df2', where = environment(), inherits=FALSE)){
         remove(df2)
       }
@@ -34,21 +38,28 @@ format_data <- function(path){
       df = read.csv(path)
     }
     #df <<- df
-    }, error = function(e){
+  }, error = function(e){
     message('File or folder path not properly provided. Refer to function documentation for appropriate input format.')
-    }
-  )
-
-  cols = c('TradingDate','TradingPeriod','ParticipantCode','PointOfConnection', 'Unit', 'ProductType', 'ProductClass', 'ReserveType', 'ProductDescription'
-               ,'UTCSubmissionDate', 'UTCSubmissionTime', 'SubmissionOrder', 'IsLatestYesNo', 'Tranche', 'MaximumRampUpMegawattsPerHour', 'MaximumRampDownMegawattsPerHour'
-               ,'PartiallyLoadedSpinningReservePercent', 'MaximumOutputMegawatts', 'ForecastOfGenerationPotentialMegawatts', 'Megawatts', 'DollarsPerMegawattHour')
-  if (!identical(colnames(df),cols)){
-    error('File contents does not match offers data format. Double check using correct file.')
   }
-
-  #remove unwanted rows
-  df = df[(df['ProductClass'] == 'Injection') & (df['ProductType'] == 'Energy') & (df['IsLatestYesNo'] == 'Y'), c('TradingDate','TradingPeriod', 'ParticipantCode','PointOfConnection',
-  'Unit', 'Tranche', 'Megawatts', 'DollarsPerMegawattHour')]
+  )
+  
+  #remove unwanted rows  
+  offercols = c('TradingDate','TradingPeriod','ParticipantCode','PointOfConnection', 'Unit', 'ProductType', 'ProductClass', 'ReserveType', 'ProductDescription'
+                ,'UTCSubmissionDate', 'UTCSubmissionTime', 'SubmissionOrder', 'IsLatestYesNo', 'Tranche', 'MaximumRampUpMegawattsPerHour', 'MaximumRampDownMegawattsPerHour'
+                ,'PartiallyLoadedSpinningReservePercent', 'MaximumOutputMegawatts', 'ForecastOfGenerationPotentialMegawatts', 'Megawatts', 'DollarsPerMegawattHour')
+  
+  demandcols = c('PointOfConnection', 'Network', 'Island', 'Participant', 'TradingDate', 'TradingPeriod', 'TradingPeriodStartTime', 'FlowDirection', 'KilowattHours')
+  
+  #can extend code here to include other emi files 
+  if (identical(colnames(df), offercols)){
+    df = df[(df['ProductClass'] == 'Injection') & (df['ProductType'] == 'Energy') & (df['IsLatestYesNo'] == 'Y'), c('TradingDate','TradingPeriod', 'ParticipantCode','PointOfConnection',
+                                                                                                                    'Unit', 'Tranche', 'Megawatts', 'DollarsPerMegawattHour')]
+  } else if (identical(colnames(df), demandcols)){
+    df = df %>% dplyr::group_by(TradingDate, TradingPeriod) %>% dplyr::summarise(MegawattHours = sum(KilowattHours)/1000, .groups = 'drop')
+  } else {
+    stop('File contents does not match offers or reconciliation data format. Double check using correct files from EMI website, link in documentation.')
+  }
+  
   #transform trading periods
   df['time'] = rcpp_time(df$TradingPeriod)
   df['Datetime'] = paste(df$TradingDate, df$time, sep=" ")
@@ -58,6 +69,3 @@ format_data <- function(path){
   row.names(df) = NULL
   return(df)
 }
-
-
-

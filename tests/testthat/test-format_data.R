@@ -1,4 +1,4 @@
-test_that("format_data runs without error", {
-  expect_silent(format_data("C:/Users/user/Downloads/20211124_Offers.csv"))
-  expect_silent(format_data("C:/Users/user/Downloads/offers"))
+## incorrect input
+test_that("wrong input to format_data throws error", {
+  expect_error(format_data(NULL), 'documentation')
 })

@@ -1,0 +1,64 @@
+---
+params:
+  data: data
+  response: response
+  set_title: report_title
+title: "`r params$set_title`"
+always_allow_html: true
+---
+  
+```{r global_options, include=FALSE}
+library(rmarkdown)
+library(knitr)
+
+opts_chunk$set(
+  fig.width = 14,
+  fig.height = 10,
+  echo = FALSE,
+  results = "asis",
+  warning = TRUE
+)
+
+data <- params$data
+response <- params$response
+```
+
+This report is intended to provide a short summary on time series price data, noting any anomalies or changes in trend.
+A summary of the data is provided below.
+
+```{r summary}
+summary(data)
+```
+
+The price to quantity curve of the data is displayed below. 
+
+```{r plot_offer_curve}
+plot_offer_curve(data)
+```
+
+```{r correlation}
+#   cat("### Correlation Analysis", fill = TRUE)
+#   if (intro[["complete_rows"]] > 0) {
+#     do_call("plot_correlation", na_omit = TRUE)
+#   } else {
+#     message("Insufficient complete rows! Skipping correlation analysis.")
+#   }
+```
+
+Anomalies are detected using the Seasonal-Hybrid ESD algorithm. The first plot shows the data decomposed into Seasonal, Trend and remainder components, with any anomalies detected flagged in red. The second plot shows the anomalies flagged in the remainder component of the decomposed data on the recomposed original time series. 
+
+```{r anomaly_detect, message=FALSE}
+a = anomaly_detect()
+print(paste('An anomaly flagged occured at', a$Datetime, 'and was', a$observed))
+a$decompose
+a$recompose
+```
+
+```{r change_points}
+#   cat("### Correlation Analysis", fill = TRUE)
+#   if (intro[["complete_rows"]] > 0) {
+#     do_call("plot_correlation", na_omit = TRUE)
+#   } else {
+#     message("Insufficient complete rows! Skipping correlation analysis.")
+#   }
+```
