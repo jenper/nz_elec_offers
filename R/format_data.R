@@ -1,17 +1,15 @@
-#read.csv('C:/Users/jenly/Downloads/ReconciledInjectionAndOfftake_202111_20220626_123724.csv.gz')
-
-Rcpp::cppFunction('
-std::vector<std::string> rcpp_time(std::vector<double> TP) {
-    int hours, minutes;
-    std::vector<std::string> time(TP.size());
-    for(size_t i = 0; i != TP.size(); i++) {
-        TP[i] = (TP[i]-1)*30;
-        hours = std::floor(TP[i] / 60);
-        minutes = fmod(TP[i],60);
-        time[i] = std::to_string(hours) + ":" + std::to_string(minutes) + ":00";
-    }
-   return time;
-}')
+#' Formats EMI files 
+#' 
+#' Formats files from the EA emi website, specifically the offers (https://www.emi.ea.govt.nz/Wholesale/Datasets/BidsAndOffers/Offers) 
+#' and reconciliation (https://www.emi.ea.govt.nz/Wholesale/Datasets/Volumes/Reconciliation) files to create data that 
+#' will work with the functions in this package. These files contain generation offers and demand data on NZ electricity. 
+#' 
+#' @param path string of path accepts path to file or folder of files from the Offers and Reconciliation folders on the EMI website 
+#' @return a data.frame of file contents formatted for use
+#' @examples
+#' format_data('C:/Users/user/Downloads/ReconciledInjectionAndOfftake_202111_20220626_123724.csv.gz')
+#' format_data('C:/Users/user/Downloads/Offers/20211106_Offers.csv')
+#' format_data('C:/Users/user/Downloads/Offers')
 
 format_data <- function(path){
   
@@ -69,3 +67,16 @@ format_data <- function(path){
   row.names(df) = NULL
   return(df)
 }
+
+Rcpp::cppFunction('
+std::vector<std::string> rcpp_time(std::vector<double> TP) {
+    int hours, minutes;
+    std::vector<std::string> time(TP.size());
+    for(size_t i = 0; i != TP.size(); i++) {
+        TP[i] = (TP[i]-1)*30;
+        hours = std::floor(TP[i] / 60);
+        minutes = fmod(TP[i],60);
+        time[i] = std::to_string(hours) + ":" + std::to_string(minutes) + ":00";
+    }
+   return time;
+}')

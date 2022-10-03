@@ -1,15 +1,21 @@
-# test_that("Invalid inputs for anomaly_detect fail as expected", {
-#   expect_error(ymd("Test"), "First argument to ymd must be a date string or a vector of date strings.")
-#   expect_error(ymd(c(1:3)), "First argument to ymd must be a date string or a vector of date strings.")
-#   expect_error(ymd(c("2011/01/19","argument")), "First argument to ymd must be a date string or a vector of date strings.")
-# })
-# 
-# test_that("Valid inputs for anomaly_detect succeed as expected", {
-#   expect_silent(ymd("2021-05-03"))
-#   expect_silent(ymd(c("2021-05-03","2022-06-25")))
-# })
-# 
-# test_that("anomaly_detect results as expected", {
-#   expect_identical(ymd("2021-05-03"), as.Date("2021-05-03"))
-#   expect_identical(ymd(c("2021-05-03","2022-06-25")), as.Date(c("2021-05-03", "2022-06-25")))
-# })
+test_that("Invalid inputs for plot_offer_curve fail as expected", {
+  p = ggplot2::ggplot(data=offers)
+  expect_error(plot_offer_curve(data = p), "Check input is a data.frame object")
+  expect_error(plot_offer_curve(data = offers, x='Test', y='DollarsPerMegawattHour'), "columns not found in data. check column names")
+  expect_error(plot_offer_curve(data = offers,  x='PointOfConnection', y='DollarsPerMegawattHour'), "argument x needs to be of numeric type")
+  expect_error(plot_offer_curve(data = offers, x='Megawatts', y='DollarsPerMegawattHour', group='Test'), "not found in data. check column names")
+  expect_error(plot_offer_curve(data = offers,  x=Megawatts, y=DollarsPerMegawattHour), "not found")
+  expect_visible(plot_offer_curve(data=demand, 'MegawattHours', 'TradingDate'))
+})
+
+test_that("Valid inputs for plot_offer_curve succeed as expected", {
+  expect_s3_class(plot_offer_curve(data = offers, x='Megawatts', y='DollarsPerMegawattHour'), 'ggplot')
+  expect_s3_class(plot_offer_curve(data = offers, x='Megawatts', y='DollarsPerMegawattHour', group='ParticipantCode'), 'ggplot')
+  expect_s3_class(plot_offer_curve(data = offers, x='Megawatts', y='DollarsPerMegawattHour', group='TradingPeriod'), 'ggplot')
+  expect_s3_class(plot_offer_curve(data = offers, x='DollarsPerMegawattHour', y='Megawatts', group='ParticipantCode'), 'ggplot')
+})
+
+test_that("plot_offer_curve plots as expected", {
+  p <- plot_offer_curve(data = offers, x='Megawatts', y='DollarsPerMegawattHour')
+  vdiffr::expect_doppelganger("default_curve", p)
+})

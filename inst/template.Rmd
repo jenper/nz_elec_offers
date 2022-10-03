@@ -33,7 +33,7 @@ summary(data)
 The price to quantity curve of the data is displayed below. 
 
 ```{r plot_offer_curve}
-plot_offer_curve(data)
+plot_offer_curve(data=data, y=response)
 ```
 
 ```{r correlation}

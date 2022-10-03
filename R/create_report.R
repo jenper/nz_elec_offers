@@ -1,3 +1,18 @@
+#' Generates html report 
+#' 
+#' Generates an html file using the other functions in the package that should give the user analysis on the inputted 
+#' datasets with summaries, plots and highlighting any anomalies in the data. 
+#' 
+#' @param data data.frame that should contain columns that can form a time series. defaults to inbuilt offers data set  
+#' @param response numeric vector of the variable that should be the focus of the reports analysis, y argument in many functions. defaults to 'DollarsPerMegawattHour' from offers
+#' @param report_title string of title of the report. defaults to 'Report'
+#' @param output_dir get directory function or string of local path where report should be saved. defaults to current working directory
+#' @param output_file string of html file name. defaults to 'report.html'
+#' @return does not return an object but generates an html file.
+#' @examples
+#' create_report(data = offers, response = 'Megawatts')
+#' create_report(data = offers, response = 'DollarsPerMegawattHour', report_title = "Report", output_dir = getwd(), output_file = "report.html")
+
 create_report <- function(data = offers, response = 'DollarsPerMegawattHour', report_title = "Report", output_dir = getwd(), output_file = "report.html") {
 
   if (!is.data.frame(data)){
