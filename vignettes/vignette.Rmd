@@ -1,5 +1,5 @@
 ---
-title: "Offers vignette"
+title: "vignette"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{vignette}
@@ -10,10 +10,44 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  eval = requireNamespace("package")
 )
 ```
 
-```{r setup}
+```{r setup, echo = FALSE}
 library(offers)
+library("png")
+knitr::include_graphics
 ```
+
+This package aims to create a report to display metrics of NZ electricity generators offers and identify any periods of unusual offers and when the underlying trend of offers seems to change.  This is to identify when electricity generators are making offers that deviate from their usual offers which could potentially signal events that have upset the electricity market (if all generators show changes at the same time) or that generators are making uncompetitive offers (if for example offers suddenly increase while market conditions remain the same). 
+
+While the default data is on NZ electricity generator offers the functions can be applied to any situation where someone may want to detect for anomalies or change points in a time series and compare those against other times series. 
+
+As an example of how to use all the functions in this package follow the following steps: 
+
+To create a dataset go to https://www.emi.ea.govt.nz/Wholesale/Datasets/BidsAndOffers/Offers select a year e.g 2021 and download all the November files. The files are named following the 'yearmonthday_Offers.csv' format e.g a 6 November 2021 file would be named '20211106_Offers.csv'. Save all these files to a single folder so they are the only files within that folder. Then run the format_data() function passing the path of where the file has been downloaded as an argument. Save the output into a variable called 'data'. 
+
+Run the plot_offer_curve() function passing 'Megawatts' and 'DollarsPerMegawattHour' and 'ParticipantCode' as the arguments e.g plot_offer_curve(data = data, x='Megawatts', y='DollarsPerMegawattHour', group='ParticipantCode') to generate a plot that looks like the one below. 
+
+```{r, echo = FALSE}
+pp = readPNG(system.file("vignettes/offer_curve.png", package = "offers"))
+plot.new() 
+rasterImage(pp,0,0,1,1)
+
+#plot_offer_curve(data = offers, x='Megawatts', y='DollarsPerMegawattHour', group='ParticipantCode')
+```
+
+Then run the anomaly_detect() function, providing 'Megawatts' and 'VWAP' as arguments e.g anomaly_detect(data = data, x = 'Datetime', y = 'VWAP'). This will create a time series using the Datetime and DollarsPerMegawattHour (to create VWAP) columns to perform anomaly detection on. Anomaly detection uses Seasonal Hybrid ESD algorithm and decomposes the time series to identify anomalies in its residual component ignoring trend and seasonal effects. Data on the anomalies detected will be returned along with the series decomposed in a chart and recomposed in a chart as depicted below. 
+
+```{r, echo = FALSE}
+pp2 = readPNG(system.file("vignettes/anomaly_detect1.png", package = "offers"))
+pp3 = readPNG(system.file("vignettes/anomaly_detect2.png", package = "offers"))
+plot.new()
+rasterImage(pp2,0,0,1,1)
+plot.new()
+rasterImage(pp3,0,0,1,1)
+```
+
+Finally run the create_report() function which will generate an html report using output from the above functions that will be saved in the path you specify and will automatically open in your browser. Use this option for a full analysis and to avoid running all the functions individually. Call the function like so create_report(data = data, response = 'DollarsPerMegawattHour', report_title = "Report", output_dir = getwd(), output_file = "report.html") with 'output_dir' being your desired path. Rename the title of the report and the html doc itself with the report_title and output_file arguments. Response should be the response variable you are interested in analysing. 

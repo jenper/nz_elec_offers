@@ -1,5 +1,7 @@
 Test plan
 
+To gain a better understanding of how the package works follow the Offer vignette.  
+
 Run tests in the test suite using devtools::test(), there should a test file for every function in the package. 
 
 For each function the expected input and output looks like so: 
