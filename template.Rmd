@@ -1,0 +1,99 @@
+---
+params:
+  data: data
+  report_config: report_config
+  response: response
+  set_title: report_title
+title: "`r params$set_title`"
+always_allow_html: true
+---
+  
+```{r global_options, include=FALSE}
+## Load library
+library(rmarkdown)
+library(knitr)
+
+## Set knitr options
+opts_chunk$set(
+  fig.width = 14,
+  fig.height = 10,
+  echo = FALSE,
+  results = "asis",
+  warning = TRUE
+)
+
+## Get user data
+data <- params$data
+#report_config <- params$report_config
+response <- params$response
+
+## Create helper functions
+do_call <- function(fun_name, na_omit = FALSE) {
+  if (na_omit) data <- na.omit(data)
+  do.call(fun_name, c(list("data" = data), report_config[[fun_name]]))
+}
+
+## Create global data
+#intro <- do_call("introduce")
+
+```
+
+```{r summary}
+# if ("introduce" %in% names(report_config)) {
+#   memory_usage <- intro[["memory_usage"]]
+#   class(memory_usage) <- "object_size"
+#   intro_df <- data.frame(
+#     "Name" = c("Rows", "Columns",
+#                "Discrete columns", "Continuous columns", "All missing columns",
+#                "Missing observations", "Complete Rows",
+#                "Total observations", "Memory allocation"),
+#     "Value" = c(
+#       format(intro[["rows"]], big.mark = ","),
+#       format(intro[["columns"]], big.mark = ","),
+#       format(intro[["discrete_columns"]], big.mark = ","),
+#       format(intro[["continuous_columns"]], big.mark = ","),
+#       format(intro[["all_missing_columns"]], big.mark = ","),
+#       format(intro[["total_missing_values"]], big.mark = ","),
+#       format(intro[["complete_rows"]], big.mark = ","),
+#       format(intro[["total_observations"]], big.mark = ","),
+#       format(memory_usage, unit = "auto")
+#     )
+#   )
+#   ## Render content
+#   cat("### Basic Statistics", fill = TRUE)
+#   cat("#### Raw Counts", fill = TRUE)
+#   kable(intro_df)
+# }
+```
+
+```{r plot_offer_stack}
+# do_call("plot_offer_stack")
+print('hi')
+```
+
+
+```{r plot_by_boxplot}
+# if ("plot_boxplot" %in% names(report_config)) {
+#   by_value <- report_config[["plot_boxplot"]][["by"]]
+#   if (!is.null(by_value)) {
+#     if (response != by_value) {
+#       cat(paste0("#### Boxplot (by ", by_value, ")"), fill = TRUE)
+#       do_call("plot_boxplot")
+#     }
+#   }
+# }
+```
+
+```{r correlation_analysis}
+# if ("plot_correlation" %in% names(report_config)) {
+#   cat("### Correlation Analysis", fill = TRUE)
+#   if (intro[["complete_rows"]] > 0) {
+#     do_call("plot_correlation", na_omit = TRUE)
+#   } else {
+#     message("Insufficient complete rows! Skipping correlation analysis.")
+#   }
+# }
+```
+
+
+

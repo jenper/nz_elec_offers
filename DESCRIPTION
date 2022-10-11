@@ -1,12 +1,12 @@
 Package: offers
 Type: Package
-Title: What the Package Does (Title Case)
+Title: NZ Electricity Offers Reporting
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Author: person("Jennifer", "Perry", , "jenlyperry@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-9919-3663"))
+Description: Creates a report to display metrics of NZ electricity generators offers and 
+    identify any periods of unusual offers and when the underlying trend of offers seems to change.
+License: `use_gpl3_license()`
 Encoding: UTF-8
 LazyData: true
 Depends: 
@@ -14,7 +14,12 @@ Depends:
 Suggests: 
     knitr,
     rmarkdown,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    vdiffr,
+    tibbletime
 Config/testthat/edition: 3
 RoxygenNote: 7.2.1
 VignetteBuilder: knitr
+LinkingTo: Rcpp, RcppArmadillo
+Imports: 
+    Rcpp (>= 0.11.0)
