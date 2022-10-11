@@ -1,7 +1,7 @@
 Test plan
 
 Installation: 
-To install try using the remotes::install_github("jenper/nz_elec_offers", INSTALL_opts="--install-tests", type='source', force=TRUE, build_vignettes = TRUE, dependencies=TRUE) command.  
+To install try using the remotes::install_github("jenper/offers", INSTALL_opts="--install-tests", type='source', force=TRUE, build_vignettes = TRUE, dependencies=TRUE) command.  
 
 To gain a better understanding of how the package works follow the Offer vignette.  
 
