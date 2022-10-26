@@ -23,7 +23,7 @@ plot_offer_curve <- function(data = offers, x='Megawatts', y='DollarsPerMegawatt
     })
   }
 
-  #Include error checking for unquoted arguments? 
+  #Include error checking for unquoted arguments 
   
   if (!(all(c(x,y) %in% colnames(data)))){
     stop('columns not found in data. check column names')
@@ -36,6 +36,7 @@ plot_offer_curve <- function(data = offers, x='Megawatts', y='DollarsPerMegawatt
   #Error check for group consisting of only one observation?
   
   #plot
+  #implement scale_fill_discrete for small numer of unique values 
   x = dplyr::sym(x)
   y = dplyr::sym(y)
   if (is.null(group)){
@@ -58,3 +59,4 @@ plot_offer_curve <- function(data = offers, x='Megawatts', y='DollarsPerMegawatt
   }
   return(p)
 }
+

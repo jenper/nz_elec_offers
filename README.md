@@ -6,5 +6,5 @@ While the default data is on NZ electricity generator offers the functions can b
 
 Note the difference between the change_points and anomaly_detect functions are that the former suggests a sustained change while the latter suggests a short-term anomaly. change_points identifies time steps when one model changes to a new model and anomaly_detect identifies time steps that deviate significantly from a single model. 
 
-To install its recommended to use the remotes::install_github("jenper/offers", INSTALL_opts="--install-tests", type='source', force=TRUE, build_vignettes = TRUE, dependencies=TRUE) command. 
+If devtools install fails try using the command remotes::install_github("jenper/offers", INSTALL_opts="--install-tests", type='source', force=TRUE, build_vignettes = TRUE, dependencies=TRUE) command. 
 

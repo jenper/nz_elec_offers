@@ -10,7 +10,7 @@
 #' @examples
 #' anomaly_detect(data = offers, x = 'Datetime', y = 'Megawatts', gsplit=FALSE)
 
-anomaly_detect <- function(data = offers, x = 'Datetime', y = 'VWAP', gsplit=FALSE){
+anomaly_detect <- function(data = offers, x = 'Datetime', y = 'VWAP'){ #, gsplit=FALSE){
   #check data
   if (!is.data.frame(data)){
     tryCatch({
@@ -61,9 +61,9 @@ anomaly_detect <- function(data = offers, x = 'Datetime', y = 'VWAP', gsplit=FAL
     data = tidyr::fill(data, .direction = 'updown')
     data[data['DollarsPerMegawattHour'] == 0, 'DollarsPerMegawattHour'] = 0.01
     #data = data %>% dplyr::group_by(Datetime, ParticipantCode) %>% dplyr::mutate(VWAP = (cumsum(Megawatts*DollarsPerMegawattHour))/(cumsum(Megawatts)), .keep='used') 
-    if (!gsplit){
-      data.grp = data %>% dplyr::group_by(Datetime) %>% dplyr::summarise(VWAP = sum(Megawatts*DollarsPerMegawattHour)/sum(Megawatts)) 
-    } #else {
+    #if (!gsplit){
+    data.grp = data %>% dplyr::group_by(Datetime) %>% dplyr::summarise(VWAP = sum(Megawatts*DollarsPerMegawattHour)/sum(Megawatts)) 
+    #} #else {
       #data.grp = data %>% dplyr::group_by(Datetime, ParticipantCode) %>% dplyr::summarise(VWAP = sum(Megawatts*DollarsPerMegawattHour)/sum(Megawatts))
     #}
   #CODE TO HANDLE GROUP WITH gsplit=TRUE  
@@ -108,18 +108,4 @@ anomaly_detect <- function(data = offers, x = 'Datetime', y = 'VWAP', gsplit=FAL
 
   return(anomalies)
 }
-
-# print.anomaly <- function(obj){
-#   data.frame(obj$x, obj$observed)
-# }
-# 
-# plot.anomaly <- function(obj, decom=TRUE) {
-#   if (decom){
-#     return(obj$decompose)
-#   } else {
-#     return(obj$recompose)
-#   }
-# }
-
-
 

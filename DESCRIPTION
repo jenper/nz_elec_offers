@@ -2,10 +2,11 @@ Package: offers
 Type: Package
 Title: NZ Electricity Offers Reporting
 Version: 0.1.0
-Author: person("Jennifer", "Perry", , "jenlyperry@gmail.com", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0001-9919-3663"))
-Description: Creates a report to display metrics of NZ electricity generators offers and 
-    identify any periods of unusual offers and when the underlying trend of offers seems to change.
+Author: person("Jennifer", "Perry", email = "jenlyperry@gmail.com", role = c("aut", "cre"),comment = c(ORCID = "0000-0001-9919-3663"))
+Description: Creates a report to display metrics of NZ electricity generators 
+    offers and identify any periods of unusual offers and when the underlying 
+    trend of offers seems to change.
+URL: https://github.com/jenper/offers
 License: `use_gpl3_license()`
 Encoding: UTF-8
 LazyData: true
@@ -16,10 +17,18 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0),
     vdiffr,
-    tibbletime
+    tibbletime,
+    corrplot
 Config/testthat/edition: 3
 RoxygenNote: 7.2.1
 VignetteBuilder: knitr
 LinkingTo: Rcpp, RcppArmadillo
 Imports: 
-    Rcpp (>= 0.11.0)
+    dplyr,
+    Rcpp (>= 0.11.0),
+    changepoint.np,
+    anomalize,
+    tidyr,
+    lubridate,
+    ggplot2
+

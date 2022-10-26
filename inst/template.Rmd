@@ -34,15 +34,11 @@ The price to quantity curve of the data is displayed below.
 
 ```{r plot_offer_curve}
 plot_offer_curve(data=data, y=response)
+print('These curves show the amount of Megawatts at the price they are offered in at. The curves steepen as the generators shift from trying to get their offers in at below marginal price (the price of the last Megawatt the system operator accepts) so their generation becomes dispatch to trying to get a price they are satisfied selling their generation at.')
 ```
 
 ```{r correlation}
-#   cat("### Correlation Analysis", fill = TRUE)
-#   if (intro[["complete_rows"]] > 0) {
-#     do_call("plot_correlation", na_omit = TRUE)
-#   } else {
-#     message("Insufficient complete rows! Skipping correlation analysis.")
-#   }
+#correlation()
 ```
 
 Anomalies are detected using the Seasonal-Hybrid ESD algorithm. The first plot shows the data decomposed into Seasonal, Trend and remainder components, with any anomalies detected flagged in red. The second plot shows the anomalies flagged in the remainder component of the decomposed data on the recomposed original time series. 
@@ -50,15 +46,19 @@ Anomalies are detected using the Seasonal-Hybrid ESD algorithm. The first plot s
 ```{r anomaly_detect, message=FALSE}
 a = anomaly_detect()
 print(paste('An anomaly flagged occured at', a$Datetime, 'and was', a$observed))
+print('Flagged anomalies would suggest that generator offers momentarily deviated from market conditions, suggesting either an unexpected event such as a line outage or a generator was pricing outside of norm for non market related reasons.')
 a$decompose
 a$recompose
 ```
 
+Change points where a segment of data has significantly changed its mean and variance compared to another segment signal a change in underlying trend. Change points are found using a change point algorithm Pruned Exact Linear Time (PELT) with a nonparametric cost function based on the empirical distribution of the data. 
+
 ```{r change_points}
-#   cat("### Correlation Analysis", fill = TRUE)
-#   if (intro[["complete_rows"]] > 0) {
-#     do_call("plot_correlation", na_omit = TRUE)
-#   } else {
-#     message("Insufficient complete rows! Skipping correlation analysis.")
-#   }
+print('Change points detected for offers')
+plot(changepoint.np::cpt.np(change_points(), nquantiles=length(data)))
+
+print('Change points detected for demand')
+#plot(changepoint.np::cpt.np(change_points(data=demand,x='MegawattHours', group='TradingDate'), nquantiles=length(data)))
+
+print('If a change points in the offers dataset did not show a corresponding change point in the demand dataset that would suggest that the change in trend in the offers dataset was not caused by a change in trend in market condition and may be a result of a generator using unreasonable market power or being anticompetitive. Would need further comparisons against other market factors for more evidence.') 
 ```

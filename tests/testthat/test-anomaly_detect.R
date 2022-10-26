@@ -10,13 +10,12 @@ test_that("Invalid inputs for anomaly_detect fail as expected", {
 
 test_that("Valid inputs for anomaly_detect succeed as expected", {
   expect_s3_class(anomaly_detect(), 'anomaly', exact = FALSE)
-  expect_s3_class(anomaly_detect(data = offers, x = 'Datetime', y = 'VWAP', gsplit=FALSE), 'anomaly', exact = FALSE)
-  expect_s3_class(anomaly_detect(data = offers, x = 'Datetime', y = 'Megawatts', gsplit=FALSE), 'anomaly', exact = FALSE)
+  expect_s3_class(anomaly_detect(data = offers, x = 'Datetime', y = 'VWAP'), 'anomaly', exact = FALSE)
+  expect_s3_class(anomaly_detect(data = offers, x = 'Datetime', y = 'Megawatts'), 'anomaly', exact = FALSE)
 # expect_s3_class(anomaly_detect(data = offers, x = Datetime, y = VWAP, gsplit=TRUE), 'anomaly', exact = FALSE)
 })
 
-test_that("anomaly_detect results as expected", {
-  skip('placeholder')
+#test_that("anomaly_detect results as expected", {
   # expect_identical() #matching python results here 
-})
+#})
 

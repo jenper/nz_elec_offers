@@ -4,7 +4,7 @@
 \alias{anomaly_detect}
 \title{Detect anomalies in time series}
 \usage{
-anomaly_detect(data = offers, x = "Datetime", y = "VWAP", gsplit = FALSE)
+anomaly_detect(data = offers, x = "Datetime", y = "VWAP")
 }
 \arguments{
 \item{data}{data.frame that should contain columns that can form a time series. defaults to inbuilt offers data set}
