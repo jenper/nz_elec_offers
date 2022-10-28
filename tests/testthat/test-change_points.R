@@ -10,9 +10,9 @@ test_that("Invalid inputs for change_points fail as expected", {
 #   expect_s3_class(change_points(data=demand,x='MegawattHours', group='TradingDate'), "offers_changepoint")
 # })
 
-test_that("change_points results as expected", {
-  expect_equal(change_points(data=offers,x='DollarsPerMegawattHour', group='TradingDate')$changepoint, c(5,14,17,30)) #matching pkg results here
-  expect_equal(change_points(data=demand,x='MegawattHours', group='TradingDate')$changepoint, c(5,29)) #matching pkg results here 
-  
-})
+# test_that("change_points results as expected", {
+#   expect_equal(change_points(data=offers,x='DollarsPerMegawattHour', group='TradingDate')$changepoint, c(5,14,17,30)) #matching pkg results here
+#   expect_equal(change_points(data=demand,x='MegawattHours', group='TradingDate')$changepoint, c(5,29)) #matching pkg results here 
+#   
+# })
 
