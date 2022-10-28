@@ -55,10 +55,10 @@ Change points where a segment of data has significantly changed its mean and var
 
 ```{r change_points}
 print('Change points detected for offers')
-plot(changepoint.np::cpt.np(change_points(), nquantiles=length(data)))
+change_points()
 
 print('Change points detected for demand')
-#plot(changepoint.np::cpt.np(change_points(data=demand,x='MegawattHours', group='TradingDate'), nquantiles=length(data)))
+change_points(data=demand,x='MegawattHours', group='TradingDate')
 
 print('If a change points in the offers dataset did not show a corresponding change point in the demand dataset that would suggest that the change in trend in the offers dataset was not caused by a change in trend in market condition and may be a result of a generator using unreasonable market power or being anticompetitive. Would need further comparisons against other market factors for more evidence.') 
 ```

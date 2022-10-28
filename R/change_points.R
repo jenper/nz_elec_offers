@@ -39,19 +39,19 @@ change_points <- function (data=offers,x='DollarsPerMegawattHour', group='Tradin
   #constructor
   new_offers_changepoint <- function(x, ...) {
     stopifnot(is.numeric(x))
-    
+
     changepoints = changepoint.np::cpt.np(x, class=FALSE, nquantiles=length(data))
     #changepoints = changepoints[-length(changepoints)]
     attr(x, "changepoint") <- changepoints
-    
+
     attr(x, "algorithm") <- 'PELT'
-    
+
     class(x) <- "offers_changepoint"
-   
+
     #structure(x, class = "offers_changepoint", changepoint = changepoints, algorithm = 'PELT')
     return(x)
   }
-  
+
   #validation
   validate_offers_changepoint <- function(x) {
     x = unclass(x)
@@ -60,32 +60,34 @@ change_points <- function (data=offers,x='DollarsPerMegawattHour', group='Tradin
     }
     return(x)
   }
-  
+
   #offers_changepoint <- function(x = numeric()) {
   #  x <- as.numeric(x)
   #  attr(x, "changepoint") <- changepoint.np::cpt.np(x, class=FALSE, nquantiles=length(data))
   #  offers_changepoint(x)
   #}
-  
+
   #create class methods
   print.offers_changepoint <- function(x) {
-    return(paste('Change points occurred at values', x[x$changepoint,], ', indexed at points', x$changepoint)) 
+    return(paste('Change points occurred at values', x[x$changepoint,], ', indexed at points', x$changepoint))
   }
-  
+
   plot.offers_changepoint <- function(x) {
-    #plot with proper date axis 
+    #plot with proper date axis
     p = plot(changepoint.np::cpt.np(x, nquantiles=length(data))) #temp placeholder
     return(p)
   }
-  
+
   changes = data$x[-length(data$x)]
-  
+
   attr(changes, "changepoint") <- changepoint.np::cpt.np(changes, class=FALSE, nquantiles=length(data))
-  
+
   class(changes) <- "offers_changepoint"
-  
+
   #segment = cpt.meanvar(data$x)
   #plot(segment)
+
+  changes = sp::plot(changepoint.np::cpt.np(data$x, nquantiles=length(data))) #test
   
   return(changes)
 }
